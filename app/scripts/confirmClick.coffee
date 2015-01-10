@@ -21,10 +21,6 @@ angular.module('confirmClick')
       # Default to a false position
       scope.confirmingAction = false
 
-      # Animate
-      element.css
-        transition: 'max-width 1s'
-
       # Toggle text based on current state
       scope.$watch 'confirmingAction', (newVal, oldVal) ->
         # First time?
@@ -51,14 +47,12 @@ angular.module('confirmClick')
         if scope.confirmingAction
           # Show confirm message
           element.text attrs.confirmMessage
-          element.css  maxWidth: '300px'
 
           # Acknowledge in confirming state
           element.addClass 'confirming'
         else
           # Show original message
           element.text actionText
-          element.css  maxWidth: textWidth
 
           # Acknowledge not in confirming state anymore
           element.removeClass 'confirming'

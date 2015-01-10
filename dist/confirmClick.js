@@ -14,7 +14,6 @@
           promise = null;
           hasConfirmed = false;
           scope.confirmingAction = false;
-          element.css({ transition: 'max-width 1s' });
           scope.$watch('confirmingAction', function (newVal, oldVal) {
             var body, clone;
             if (newVal === oldVal && oldVal === false) {
@@ -31,11 +30,9 @@
             }
             if (scope.confirmingAction) {
               element.text(attrs.confirmMessage);
-              element.css({ maxWidth: '300px' });
               return element.addClass('confirming');
             } else {
               element.text(actionText);
-              element.css({ maxWidth: textWidth });
               return element.removeClass('confirming');
             }
           });
