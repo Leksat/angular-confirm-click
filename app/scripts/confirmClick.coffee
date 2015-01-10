@@ -15,34 +15,11 @@ angular.module('confirmClick')
       # Timeout
       promise = null
 
-      # Already confirmed?
-      hasConfirmed = false
-
       # Default to a false position
       scope.confirmingAction = false
 
       # Toggle text based on current state
       scope.$watch 'confirmingAction', (newVal, oldVal) ->
-        # First time?
-        if newVal == oldVal == false
-          # Clone the element and push it off screenn
-          clone = element.clone()
-          clone.css
-            left: '-9999px'
-            position: 'absolute'
-
-          # Append to the DOM so it can be measured
-          body = $document[0].body
-          body.appendChild clone[0]
-
-          # Set the original width of the text
-          textWidth = clone[0].offsetWidth
-
-          # Ensure measurement in pixels
-          textWidth = textWidth + 'px'
-
-          # Remove from the DOM to cleanup
-          body.removeChild clone[0]
 
         if scope.confirmingAction
           # Show confirm message
@@ -72,20 +49,18 @@ angular.module('confirmClick')
 
         # Subsequent clicks
         else
-          # Stop a double click
-          return if hasConfirmed
-
-          # User has confirmed
-          hasConfirmed = true
 
           # Ensure the confirm action text remains
           $timeout.cancel promise
 
-          # Indicate click occured
-          element.css opacity: '0.5'
-
           # Acknowledge not in confirming state anymore
           element.removeClass 'confirming'
+
+          # Show original message
+          element.text actionText
+
+          # Allow button to be clicked multiply times
+          scope.confirmingAction = false
 
           # Trigger action
           scope.$parent.$apply attrs.confirmClick

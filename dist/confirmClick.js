@@ -8,26 +8,12 @@
       return {
         scope: {},
         link: function (scope, element, attrs) {
-          var actionText, hasConfirmed, promise, textWidth;
+          var actionText, promise, textWidth;
           actionText = element.text();
           textWidth = null;
           promise = null;
-          hasConfirmed = false;
           scope.confirmingAction = false;
           scope.$watch('confirmingAction', function (newVal, oldVal) {
-            var body, clone;
-            if (newVal === oldVal && oldVal === false) {
-              clone = element.clone();
-              clone.css({
-                left: '-9999px',
-                position: 'absolute'
-              });
-              body = $document[0].body;
-              body.appendChild(clone[0]);
-              textWidth = clone[0].offsetWidth;
-              textWidth = textWidth + 'px';
-              body.removeChild(clone[0]);
-            }
             if (scope.confirmingAction) {
               element.text(attrs.confirmMessage);
               return element.addClass('confirming');
@@ -45,13 +31,10 @@
                 return scope.confirmingAction = false;
               }, 1500);
             } else {
-              if (hasConfirmed) {
-                return;
-              }
-              hasConfirmed = true;
               $timeout.cancel(promise);
-              element.css({ opacity: '0.5' });
               element.removeClass('confirming');
+              element.text(actionText);
+              scope.confirmingAction = false;
               return scope.$parent.$apply(attrs.confirmClick);
             }
           });
